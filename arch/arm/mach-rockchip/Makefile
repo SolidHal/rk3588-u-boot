@@ -21,7 +21,24 @@ ifeq ($(CONFIG_SPL_BUILD)$(CONFIG_TPL_BUILD),)
 # inside of boot_mode.c when CONFIG_BOOT_MODE_REG is 0.  This way,
 # we can have the preprocessor correctly recognise both 0x0 and 0
 # meaning "turn it off".
+obj-y += chip_info.o
+obj-y += lowlevel_init.o
 obj-y += boot_mode.o
+obj-y += boot_rkimg.o
+obj-y += board.o
+obj-y += iomem.o
+obj-y += memblk.o
+obj-y += hotkey.o
+
+
+obj-$(CONFIG_USING_KERNEL_DTB) += kernel_dtb.o
+obj-$(CONFIG_ROCKCHIP_FIT_IMAGE) += fit.o
+obj-$(CONFIG_ROCKCHIP_UIMAGE) += uimage.o
+obj-$(CONFIG_ROCKCHIP_SMCCC) += rockchip_smccc.o
+obj-$(CONFIG_ROCKCHIP_VENDOR_PARTITION) += vendor.o vendor_misc.o
+obj-$(CONFIG_ROCKCHIP_RESOURCE_IMAGE) += resource_img.o resource_logo.o
+obj-$(CONFIG_ROCKCHIP_HWID_DTB) += resource_hwid.o
+
 obj-$(CONFIG_ROCKCHIP_COMMON_BOARD) += board.o
 obj-$(CONFIG_MISC_INIT_R) += misc.o
 endif
@@ -30,6 +47,7 @@ ifeq ($(CONFIG_TPL_BUILD),)
 obj-$(CONFIG_DISPLAY_CPUINFO) += cpu-info.o
 endif
 
+obj-$(CONFIG_RAM) += param.o
 obj-$(CONFIG_$(SPL_TPL_)RAM) += sdram.o
 
 obj-$(CONFIG_ROCKCHIP_PX30) += px30/
@@ -45,6 +63,7 @@ obj-$(CONFIG_ROCKCHIP_RK3368) += rk3368/
 obj-$(CONFIG_ROCKCHIP_RK3399) += rk3399/
 obj-$(CONFIG_ROCKCHIP_RK3568) += rk3568/
 obj-$(CONFIG_ROCKCHIP_RV1108) += rv1108/
+obj-$(CONFIG_ROCKCHIP_RK3588) += rk3588/
 
 # Clear out SPL objects, in case this is a TPL build
 obj-spl-$(CONFIG_TPL_BUILD) =
@@ -52,3 +71,5 @@ obj-spl-$(CONFIG_TPL_BUILD) =
 # Now add SPL/TPL objects back into the main build
 obj-$(CONFIG_SPL_BUILD) += $(obj-spl-y)
 obj-$(CONFIG_TPL_BUILD) += $(obj-tpl-y)
+
+obj-$(CONFIG_ROCKCHIP_PRELOADER_ATAGS) += rk_atags.o
